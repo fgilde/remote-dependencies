@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "remote-dependencies"
+    "url": "https://github.com/fgilde/remote-dependencies"
   },
   "keywords": [
     "remote",
@@ -23,7 +23,7 @@
     "scss"
   ],
   "author": "Florian Gilde",
-  "license": "ISC",
+  "license": "GNU",
   "dependencies": {
     "shelljs": "^0.8.5"
   }
