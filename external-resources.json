@@ -2,7 +2,7 @@
     "placeholders": {
         "remote": "https://sw-theme-studio.labs.sabio.de",
         "theme" : "material",
-        "localDir": "./stylers"
+        "localDir": "./external-assets"
     },
     "mappings" : [
         {
