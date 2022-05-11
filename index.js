@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 const argPrefix = '-';
-const defaultConfigFileName = 'external.dependencies.config.json';
+const defaultConfigFileName = 'external-resources.json';
 
 const shell = require("shelljs");
 const fs = require('fs');
@@ -44,10 +44,12 @@ function run() {
             }
             var file = fs.createWriteStream(fileName, {flag: 'wx'} );
             console.log("Read from " + url);        
-            return (url.toLowerCase().startsWith('https') ? https : http).get(url, (response) => {       
-                console.log("Write to " + fileName);         
-                response.pipe(file);
-                resolve();
+            return (url.toLowerCase().startsWith('https') ? https : http).get(url, (response) => {     
+                if (response.statusCode === 200)  {
+                    console.log("Write to " + fileName);         
+                    response.pipe(file);
+                    resolve();
+                } 
             });
         });
     }));    
