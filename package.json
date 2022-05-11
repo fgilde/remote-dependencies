@@ -1,6 +1,6 @@
 {
   "name": "@fgilde/remote-dependencies",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple mapping for remote files to download them locally",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "external",
     "scss",
     "sass",
-    "web",    
+    "web",
     "scss"
   ],
   "author": "Florian Gilde",
