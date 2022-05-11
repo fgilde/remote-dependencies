@@ -15,7 +15,7 @@ Create a json file in your stucture default filename is `external-resources.json
 ```json
 {
     "placeholders": { // Placeholders are optional
-        "remote": "https://sw-theme-studio.labs.sabio.de",
+        "remote": "https://sw-theme-studio.azurewebsites.net",
         "theme" : "material",
         "localDir": "./external-assets"
     },
@@ -70,3 +70,63 @@ To run this script before run build in package.json file, you just add prebuild 
     ├─-─ logo-g.png             # Third Mapping
     ├─-─ mysuper.scss           # Second Mapping
   
+
+
+# Some special features
+
+### Multiple Outputs
+ You can write one response in multiple output files just by using an array for the `to` config inside a mapping
+```json
+    "mappings" : [
+        ...
+        {
+            "from": "https://www.golem.de/staticrl/images/logo-g.png" ,
+            "to": ["{localDir}", "{localDir}/the-logo.png"]
+        }
+    ],
+```
+> This sample will create two local files `external-assets\logo-g.png` and `external-assets\the-logo.png`
+
+<br>
+<br>
+
+#
+### Multiple placeholders
+
+Your placeholder can also have an string array as value. 
+> See property `components` in this example
+
+```json
+    "placeholders": {        
+        "remote": "https://sw-theme-studio.azurewebsites.net",
+        "theme" : "material",
+        "localDir": "./external-assets",                
+        "components": ["grid", "pivotview", "button"]
+    },
+    "mappings" : [        
+        {
+            "from": "{remote}/theme/{theme}/css/{components}" ,            
+            "to": "{localDir}/{theme}/components/css/_{components}.css"
+        }                       
+    ]
+```
+> The config above will then make 3 requests with one mapping config 
+<br>
+`https://sw-theme-studio.azurewebsites.net/theme/material/css/grid` 
+to `./external-assets/material/components/css/_grid.css`
+<br>
+`https://sw-theme-studio.azurewebsites.net/theme/material/css/pivotview` 
+to `./external-assets/material/components/css/_pivotview.css`
+<br>
+`https://sw-theme-studio.azurewebsites.net/theme/material/css/button` 
+to `./external-assets/material/components/css/_button.css`
+<br>
+
+<br>
+<br>
+
+#
+## Links
+[Github Repository](https://github.com/fgilde/remote-dependencies) | 
+[NPM Package](https://www.npmjs.com/package/@fgilde/remote-dependencies)
+#

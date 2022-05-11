@@ -9,51 +9,73 @@ const path = require('path');
 const http = require('http'); 
 const https = require('https');
 
-const cfgFile = readArg('config') || defaultConfigFileName;
+var tools = require('./helper/tools');
+
+const cfgFile = tools.fromCommandLineArg('config', argPrefix) || defaultConfigFileName;
 const config = JSON.parse(fs.readFileSync(cfgFile));
 
-function _(str) { // replaces all placeholders in str
-    Object.keys(config?.placeholders).forEach(k => {
-        str = str.replace(new RegExp(`{${k}}`, 'g'), config.placeholders[k]);
+function _(str, asArray) { // replaces all placeholders in str
+    var keys = Object.keys(config?.placeholders);
+    var result = [];
+    keys.filter(k => !Array.isArray(config.placeholders[k])).forEach(k => {
+        var value = config.placeholders[k];
+        str = str.replace(new RegExp(`{${k}}`, 'g'), value);
     });
-    return str;
+    result.push(str);
+    if (asArray) {
+        keys.filter(k => Array.isArray(config.placeholders[k]) && str.includes(`{${k}}`)).forEach(k => {
+            var value = config.placeholders[k];             
+            value.forEach(v => {
+                result.push(str.replace(new RegExp(`{${k}}`, 'g'), v));
+            });        
+        });
+        return result.filter(s => !keys.some(k => s.includes(`{${k}}`)));
+    }
+    
+    return result[0];
 }
 
-function readArg(name) {
-    name = name.toLowerCase();
-    var args = process.argv.slice(2).map(s => s.toLowerCase());
-    return args.filter(a => a.split('=')[0]?.startsWith(`${argPrefix}${name}`))?.map(s => s.split('=').slice(1).join('='))[0];    
+
+
+function spread(mappings) {
+    var keys = Object.keys(config?.placeholders).filter(k => Array.isArray(config.placeholders[k]));    
+    var result = mappings.filter(m => !keys.some(k => m.from.includes(`{${k}}`) || m.to.includes(`{${k}}`)));
+    mappings.filter(m => keys.some(k => m.from.includes(`{${k}}`) || m.to.includes(`{${k}}`))).forEach(m => {
+        _(m.from, true).forEach((from,i)=> {
+            result.push({
+                from: from,
+                to: _(m.to, true)[i] || _(m.to)
+            });
+        });
+ 
+    });    
+    //console.log(result); return [];
+    return result;
 }
 
-function run() {
-    return Promise.all(config.mappings.map(m => {
+
+function run(mappings) {
+    return Promise.all(mappings.map(m => {
         return new Promise((resolve, reject)=> {
-            let url = _(m.from),
-                fileName = _(m.to),
-                suggestedName = path.basename(url),
-                dir = path.dirname(fileName);
-            
-            if(!(path.extname(fileName))){
-                fileName += fileName.endsWith('/') ? suggestedName : `/${suggestedName}`;
-            }       
-            if (!fs.existsSync(dir)){
-                fs.mkdirSync(dir);
-            }       
-            if (!fs.existsSync(fileName)) {
-                fs.writeFileSync(fileName, "", { flag: 'wx' });
-            }
-            var file = fs.createWriteStream(fileName, {flag: 'wx'} );
-            console.log("Read from " + url);        
-            return (url.toLowerCase().startsWith('https') ? https : http).get(url, (response) => {     
+            let url = _(m.from);          
+            (url.toLowerCase().startsWith('https') ? https : http).get(url, (response) => { 
+                console.log("Read from " + url);    
                 if (response.statusCode === 200)  {
-                    console.log("Write to " + fileName);         
-                    response.pipe(file);
-                    resolve();
-                } 
+                    (Array.isArray(m.to) ? m.to : [m.to]).forEach(to => {                        
+                        _(to, true).forEach(f => {                            
+                            var fileName = tools.ensureFile(f, path.basename(url));                                                                                                               
+                            var file = fs.createWriteStream(fileName, {flag: 'wx'} );
+                            console.log("Write to " + fileName);         
+                            response.pipe(file);                     
+                         }) ; 
+                    });
+                }
+                resolve();                 
             });
         });
     }));    
 }
 
 shell.exec("echo using config file " + cfgFile);
-run().then(() => console.log(`DONE ! Finished downloading ${config?.mappings?.length} external files !`));
+var mappings = spread(config.mappings);
+run(mappings).then(() => console.log(`DONE !!`));

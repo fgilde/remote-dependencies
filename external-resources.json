@@ -1,8 +1,10 @@
 {
     "placeholders": {
-        "remote": "https://sw-theme-studio.labs.sabio.de",
+        "_remote": "https://sw-theme-studio.labs.sabio.de",
+        "remote": "https://sw-theme-studio.azurewebsites.net",
         "theme" : "material",
-        "localDir": "./external-assets"
+        "localDir": "./external-assets",                
+        "components": ["grid", "pivotview","treegrid","calendar","schedule","gantt","button","radio-button","drop-down-button","split-button","button-group","progress-button","switch","drop-down-list","combo-box","auto-complete","input","numerictextbox","maskedtextbox","uploader","multi-select","datepicker","daterangepicker","datetimepicker","timepicker","color-picker","slider","check-box","rich-text-editor","chips","inplace-editor","list-box","query-builder","dialog","listview","tooltip","splitter","badge","toast","treeview","toolbar","tab","accordion","context-menu","menu","file-manager"]
     },
     "mappings" : [
         {
@@ -15,7 +17,25 @@
         },
         {
             "from": "https://www.golem.de/staticrl/images/logo-g.png" ,
-            "to": "{localDir}"
+            "to": ["{localDir}", "{localDir}/the-logo.png"]
         }
+    ],
+    "_mappings" : [
+        {
+            "from": "{remote}/theme/{theme}/scss/" ,
+            "to": "{localDir}/{theme}/{theme}.scss"
+        },
+        {
+            "from": "{remote}/theme/{theme}/css/" ,
+            "to": "{localDir}/{theme}/{theme}.css"
+        },
+        {
+            "from": "{remote}/theme/{theme}/scss/{components}" ,            
+            "to": "{localDir}/{theme}/components/scss/_{components}.scss"
+        },
+        {
+            "from": "{remote}/theme/{theme}/css/{components}" ,            
+            "to": "{localDir}/{theme}/components/css/_{components}.css"
+        }                       
     ]
 }
