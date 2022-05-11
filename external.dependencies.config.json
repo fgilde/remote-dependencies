@@ -1,0 +1,21 @@
+{
+    "placeholders": {
+        "remote": "https://sw-theme-studio.labs.sabio.de",
+        "theme" : "material",
+        "localDir": "./stylers"
+    },
+    "mappings" : [
+        {
+            "from": "{remote}/theme/{theme}/scss/" ,
+            "to": "{localDir}/mysuper.scss"
+        },
+        {
+            "from": "{remote}/theme/bootstrap/scss/" ,
+            "to": "{localDir}/bootstrap.scss"
+        },
+        {
+            "from": "https://www.golem.de/staticrl/images/logo-g.png" ,
+            "to": "{localDir}"
+        }
+    ]
+}

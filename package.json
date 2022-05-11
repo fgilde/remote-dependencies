@@ -1,0 +1,30 @@
+{
+  "name": "@fgilde/remote-dependencies",
+  "version": "1.0.0",
+  "description": "Simple mapping for remote files to download them locally",
+  "main": "index.js",
+  "scripts": {
+    "test": "run"
+  },
+  "bin": {
+    "update-remotes": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "remote-dependencies"
+  },
+  "keywords": [
+    "remote",
+    "dependencies",
+    "external",
+    "scss",
+    "sass",
+    "web",    
+    "scss"
+  ],
+  "author": "Florian Gilde",
+  "license": "ISC",
+  "dependencies": {
+    "shelljs": "^0.8.5"
+  }
+}
