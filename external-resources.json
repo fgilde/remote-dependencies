@@ -3,13 +3,57 @@
         "_remote": "https://sw-theme-studio.labs.sabio.de",
         "remote": "https://sw-theme-studio.azurewebsites.net",
         "theme" : "material",
-        "localDir": "./external-assets",                
+        "localDir": "./external-assets",
+        "fontDir": "./external-assets/fonts",
+        "fontsToReplace": ["Roboto", "GeezaPro"],
+        "materialIconFontUrl": "https://fonts.gstatic.com/s/materialicons/v139/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ",
+        "openSansFonts": ["memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsiH0B4gaVc.ttf", "memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf", "memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsg-1x4gaVc.ttf"],
         "components": ["grid", "pivotview","treegrid","calendar","schedule","gantt","button","radio-button","drop-down-button","split-button","button-group","progress-button","switch","drop-down-list","combo-box","auto-complete","input","numerictextbox","maskedtextbox","uploader","multi-select","datepicker","daterangepicker","datetimepicker","timepicker","color-picker","slider","check-box","rich-text-editor","chips","inplace-editor","list-box","query-builder","dialog","listview","tooltip","splitter","badge","toast","treeview","toolbar","tab","accordion","context-menu","menu","file-manager"]
     },
     "mappings" : [
         {
+            "from": "{materialIconFontUrl}.ttf" ,
+            "to": "{fontDir}/material-icons.ttf"
+        },
+        {
+            "from": "https://fonts.googleapis.com/icon?family=Material+Icons" ,
+            "to": "{localDir}/material-icons.css",
+            "replacements": [
+                {
+                    "from": "{materialIconFontUrl}",
+                    "to": "{fontDir}/material-icons"
+                }
+            ]
+        },
+        {
+            "from": "https://fonts.googleapis.com/css?family=Open+Sans:300,400,700",
+            "to": "{localDir}/open-sans.css",
+            "replacements": [
+                {
+                    "from": "https://fonts.gstatic.com/s/opensans/v34/",
+                    "to": "{fontDir}/"
+                }
+            ]
+        },
+        {
+            "from": "https://fonts.gstatic.com/s/opensans/v34/{openSansFonts}",
+            "to": "{fontDir}",
+            "replacements": [
+                {
+                    "from": "{materialIconFontUrl}",
+                    "to": "{fontDir}/material-icons"
+                }
+            ]
+        },
+        {
             "from": "{remote}/theme/{theme}/scss/" ,
-            "to": "{localDir}/mysuper.scss"
+            "to": "{localDir}/mysuper.scss",
+            "replacements": [
+                {
+                    "from": "{fontsToReplace}",
+                    "to": "Verdana"
+                }
+            ]
         },
         {
             "from": "{remote}/theme/bootstrap/scss/" ,
@@ -30,12 +74,12 @@
             "to": "{localDir}/{theme}/{theme}.css"
         },
         {
-            "from": "{remote}/theme/{theme}/scss/{components}" ,            
+            "from": "{remote}/theme/{theme}/scss/{components}" ,
             "to": "{localDir}/{theme}/components/scss/_{components}.scss"
         },
         {
-            "from": "{remote}/theme/{theme}/css/{components}" ,            
+            "from": "{remote}/theme/{theme}/css/{components}" ,
             "to": "{localDir}/{theme}/components/css/_{components}.css"
-        }                       
+        }
     ]
 }

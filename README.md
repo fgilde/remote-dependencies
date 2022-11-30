@@ -122,10 +122,113 @@ to `./external-assets/material/components/css/_pivotview.css`
 to `./external-assets/material/components/css/_button.css`
 <br>
 
-<br>
-<br>
+### File Result Replacements
+Replacements on file results are new since v1.0.4. And can be configured on a mapping like this
 
-#
+```json
+{
+  "placeholders": {
+    "localDir": "./src/scss/external",
+    "fontDir": "./src/scss/fonts",
+    "materialIconFontUrl": "https://fonts.gstatic.com/s/materialicons/v139/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ",
+    ...
+  },
+  "mappings": [
+    ...
+    {
+      "form": "{srcUrl}",
+      "to": "{localDir}",
+      "replacements": [
+        {
+          "from": "toReplace",
+          "to": "replaced"
+        }
+      ]
+    },
+    {
+      "from": "https://fonts.googleapis.com/icon?family=Material+Icons",
+      "to": "{localDir}/material-icons.css",
+      "replacements": [
+        // File Result replacements can also resolve placeholders
+        {
+          "from": "{materialIconFontUrl}",
+          "to": "{fontDir}/material-icons"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Real case szenario
+
+This tool can be usefully for example to be legal conform for GDPR/DSGVO requirements.
+In this example we want to download all css and font files from some third party websites and store them locally.
+Here in this case we resolve general material-components-web.css, font-awesome, google material icons and Open Sans from googlefonts api to ensure all resources are available locally and to besure to be GDPR conform 
+
+```json
+{
+  "placeholders": {
+    "localDir": "./src/scss/external",
+    "fontDir": "./src/scss/fonts",
+    "materialIconFontUrl": "https://fonts.gstatic.com/s/materialicons/v139/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ",
+    "openSansFonts": ["memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsiH0B4gaVc.ttf", "memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf", "memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsg-1x4gaVc.ttf"],
+    "fontFiles": ["fontawesome-webfont.eot", "fontawesome-webfont.woff2", "fontawesome-webfont.woff", "fontawesome-webfont.ttf", "fontawesome-webfont.svg"]
+  },
+  "mappings" : [
+    {
+      "from": "https://unpkg.com/material-components-web@4.0.0/dist/material-components-web.min.css" ,
+      "to": "{localDir}/material-components-web.min.css"
+    },
+    {
+      "from": "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" ,
+      "to": "{localDir}/font-awesome.min.css"
+    },
+    {
+      "from": "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/{fontFiles}" ,
+      "to": "{fontDir}"
+    },
+    {
+      "from": "{materialIconFontUrl}.ttf" ,
+      "to": "{fontDir}/material-icons.ttf"
+    },
+    {
+      "from": "https://fonts.googleapis.com/icon?family=Material+Icons" ,
+      "to": "{localDir}/material-icons.css",
+      "replacements": [
+        {
+          "from": "{materialIconFontUrl}",
+          "to": "{fontDir}/material-icons"
+        }
+      ]
+    },
+    {
+      "from": "https://fonts.googleapis.com/css?family=Open+Sans:300,400,700",
+      "to": "{localDir}/open-sans.css",
+      "replacements": [
+        {
+          "from": "https://fonts.gstatic.com/s/opensans/v34/",
+          "to": "{fontDir}/"
+        }
+      ]
+    },
+    {
+      "from": "https://fonts.gstatic.com/s/opensans/v34/{openSansFonts}",
+      "to": "{fontDir}",
+      "replacements": [
+        {
+          "from": "{materialIconFontUrl}",
+          "to": "{fontDir}/material-icons"
+        }
+      ]
+    }
+  ]
+}
+```
+### If you like this tool, please star it on [Github](https://github.com/fgilde/remote-dependencies)  and share it with your friends
+If not, you can give a star anyway and let me know what I can improve to make it better for you.
+
+
 ## Links
 [Github Repository](https://github.com/fgilde/remote-dependencies) | 
 [NPM Package](https://www.npmjs.com/package/@fgilde/remote-dependencies)
