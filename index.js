@@ -15,42 +15,15 @@ const cfgFile = tools.fromCommandLineArg('config', argPrefix) || defaultConfigFi
 const config = JSON.parse(fs.readFileSync(cfgFile));
 
 function _(str, asArray) { // replaces all placeholders in str
-    const keys = Object.keys(config?.placeholders);
-    let result = [];
-    keys.filter(k => !Array.isArray(config.placeholders[k])).forEach(k => {
-        let value = config.placeholders[k];
-        str = str.replace(new RegExp(`{${k}}`, 'g'), value);
-    });
-    result.push(str);
-    if (asArray) {
-        keys.filter(k => Array.isArray(config.placeholders[k]) && str.includes(`{${k}}`)).forEach(k => {
-            let value = config.placeholders[k];
-            value.forEach(v => {
-                result.push(str.replace(new RegExp(`{${k}}`, 'g'), v));
-            });
-        });
-        return result.filter(s => !keys.some(k => s.includes(`{${k}}`)));
-    }
-
-    return result[0];
+    return tools._(config, str, asArray);
 }
 
-
-
 function spread(mappings) {
-    const keys = Object.keys(config?.placeholders).filter(k => Array.isArray(config.placeholders[k])),
-        result = mappings.filter(m => !keys.some(k => m.from.includes(`{${k}}`) || m.to.includes(`{${k}}`)));
-    mappings.filter(m => keys.some(k => m.from.includes(`{${k}}`) || m.to.includes(`{${k}}`))).forEach(m => {
-        _(m.from, true).forEach((from,i)=> {
-            result.push({
-                from: from,
-                to: _(m.to, true)[i] || _(m.to)
-            });
-        });
+    return tools.spread(config, mappings);
+}
 
-    });
-    //console.log(result); return [];
-    return result;
+function stringAsSafeRegExp(str) {
+    return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
 function replaceResultReplacementsInStr(str, replacementCfg) {
@@ -59,7 +32,12 @@ function replaceResultReplacementsInStr(str, replacementCfg) {
         console.log(replacements);
         replacements.forEach(r => {
             //str = str.replace(new RegExp(r.from, 'g'), r.to);
-            str = str.replace(new RegExp(_(r.from), 'g'), _(r.to));
+            try{
+                str = str.replace(new RegExp(_(r.from), 'g'), _(r.to));
+            } catch (e) {
+                //str = str.replaceAll(_(r.from), _(r.to));
+                str = str.replace(new RegExp(stringAsSafeRegExp(_(r.from)), 'g'), _(r.to));
+            }
         });
     }
     return str;

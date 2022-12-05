@@ -9,7 +9,10 @@ npm install --save-dev @fgilde/remote-dependencies
 
 ### Step 2 Create config file
 
-Create a json file in your stucture default filename is `external-resources.json`
+Create a json config file in your structure.
+The default filename is `external-resources.json` but you can name your file as you want.
+If you want to use a different filename you have to specify it with the `-config` parameter.
+example: `external-resources.json -config="./yourpath/yourconfigfile.json"`
 
 #### Sample config
 ```json
@@ -159,6 +162,9 @@ Replacements on file results are new since v1.0.4. And can be configured on a ma
   ]
 }
 ```
+Notice that the `replacements` property is an array of objects with `from` and `to` properties. The `from` property is the string to replace and the `to` property is the replacement string. The `replacements` property is optional and can be omitted.
+from and to can also be a placeholder like `{localDir}`
+and also regular expressions are supported but if an error occurs a replacement without regular expressions is used
 
 ### Real case szenario
 

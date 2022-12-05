@@ -1,5 +1,6 @@
 {
     "placeholders": {
+        "fontAwesomeVersion": "4.7.0",
         "_remote": "https://sw-theme-studio.labs.sabio.de",
         "remote": "https://sw-theme-studio.azurewebsites.net",
         "theme" : "material",
@@ -14,6 +15,28 @@
         {
             "from": "{materialIconFontUrl}.ttf" ,
             "to": "{fontDir}/material-icons.ttf"
+        },
+        {
+            "from": "https://maxcdn.bootstrapcdn.com/font-awesome/{fontAwesomeVersion}/css/font-awesome.min.css" ,
+            "to": "{localDir}/font-awesome.min.css",
+            "replacements": [
+                {
+                    "from": "?#iefix",
+                    "to": ""
+                },
+                {
+                    "from": "?v={fontAwesomeVersion}#fontawesomeregular",
+                    "to": ""
+                },
+                {
+                    "from": "&v={fontAwesomeVersion}",
+                    "to": ""
+                },
+                {
+                    "from": "?v={fontAwesomeVersion}",
+                    "to": ""
+                }
+            ]
         },
         {
             "from": "https://fonts.googleapis.com/icon?family=Material+Icons" ,

@@ -4,7 +4,8 @@
   "description": "Simple mapping for remote files to download them locally",
   "main": "index.js",
   "scripts": {
-    "test": "run"
+    "test": "run",
+    "patch-release": "npm version patch && npm publish --access public && git push --follow-tags"
   },
   "bin": {
     "update-remotes": "index.js"
