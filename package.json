@@ -1,6 +1,6 @@
 {
   "name": "@fgilde/remote-dependencies",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Simple mapping for remote files to download them locally",
   "main": "index.js",
   "scripts": {
