@@ -1,4 +1,5 @@
 {
+    "skipCertificateCheck": false,
     "placeholders": {
         "fontAwesomeVersion": "4.7.0",
         "_remote": "https://sw-theme-studio.labs.sabio.de",

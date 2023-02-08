@@ -14,6 +14,11 @@ var tools = require('./helper/tools');
 const cfgFile = tools.fromCommandLineArg('config', argPrefix) || defaultConfigFileName;
 const config = JSON.parse(fs.readFileSync(cfgFile));
 
+if(config && config.skipCertificateCheck) {
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+//process.env.NODE_TLS_REJECT_UNAUTHORIZED='0'
+}
+
 function _(str, asArray) { // replaces all placeholders in str
     return tools._(config, str, asArray);
 }
